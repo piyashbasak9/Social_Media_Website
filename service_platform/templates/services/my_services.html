@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Services</h2>
+<a href="{% url 'services:create' %}" class="btn btn-primary mb-3">+ New Service</a>
+<table class="table">
+<tr><th>Title</th><th>Price</th><th>Status</th><th></th></tr>
+{% for s in services %}
+<tr>
+    <td>{{ s.title }}</td><td>{{ s.token_price }}</td><td>{{ s.get_status_display }}</td>
+    <td>
+        <a href="{% url 'services:edit' s.id %}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{% url 'services:upload_media' s.id %}" class="btn btn-sm btn-info">Media</a>
+        <a href="{% url 'services:delete' s.id %}" class="btn btn-sm btn-danger">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

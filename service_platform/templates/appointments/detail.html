@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Appointment</h3>
+<p>User: {{ appointment.user.full_name }}</p>
+<p>Staff: {{ appointment.staff.full_name }}</p>
+<p>Service: {{ appointment.service.title }}</p>
+<p>Scheduled: {{ appointment.scheduled_time }}</p>
+<p>Duration: {{ appointment.duration_minutes }} min</p>
+<p>Status: <strong>{{ appointment.get_status_display }}</strong></p>
+<p>Meeting Room: {{ appointment.meeting_room }}</p>
+
+{% if user == appointment.staff %}
+    {% if appointment.status == 'pending' %}
+    <a href="{% url 'appointments:confirm' appointment.id %}" class="btn btn-success">Confirm</a>
+    {% endif %}
+    {% if appointment.status == 'confirmed' %}
+    <a href="{% url 'appointments:complete' appointment.id %}" class="btn btn-primary">Mark Completed</a>
+    {% endif %}
+{% endif %}
+<a href="{% url 'appointments:cancel' appointment.id %}" class="btn btn-danger">Cancel</a>
+
+{% if user == appointment.user and appointment.status == 'completed' and not appointment.review %}
+<a href="{% url 'reviews:create' appointment.id %}" class="btn btn-warning">Leave Review</a>
+{% endif %}
+{% endblock %}

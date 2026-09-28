@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Appointments</h2>
+<table class="table">
+<tr><th>User</th><th>Staff</th><th>Service</th><th>Time</th><th>Status</th><th></th></tr>
+{% for a in appointments %}
+<tr>
+    <td>{{ a.user.full_name }}</td><td>{{ a.staff.full_name }}</td><td>{{ a.service.title }}</td>
+    <td>{{ a.scheduled_time }}</td><td>{{ a.get_status_display }}</td>
+    <td><a href="{% url 'appointments:detail' a.id %}" class="btn btn-sm btn-info">View</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

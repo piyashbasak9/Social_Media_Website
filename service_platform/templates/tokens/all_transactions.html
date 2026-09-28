@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>All Token Transactions</h2>
+<table class="table">
+<tr><th>User</th><th>Type</th><th>Amount</th><th>After</th><th>By</th><th>When</th></tr>
+{% for t in transactions %}
+<tr>
+    <td>{{ t.user.email }}</td><td>{{ t.get_transaction_type_display }}</td>
+    <td>{{ t.amount }}</td><td>{{ t.balance_after }}</td>
+    <td>{{ t.performed_by.email|default:"-" }}</td><td>{{ t.created_at }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

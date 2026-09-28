@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Create Post</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <label>Media files (images/videos):</label>
+    <input type="file" name="media_files" multiple class="form-control mb-2">
+    <button class="btn btn-primary">Post</button>
+</form>
+{% endblock %}

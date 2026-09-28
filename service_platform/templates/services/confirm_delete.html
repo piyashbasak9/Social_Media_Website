@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Delete "{{ service.title }}"?</h3>
+<form method="post">{% csrf_token %}
+<button class="btn btn-danger">Delete</button>
+<a href="{% url 'services:my_services' %}" class="btn btn-secondary">Cancel</a></form>
+{% endblock %}

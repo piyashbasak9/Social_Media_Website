@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card mb-3 shadow-sm border-0">
+    {% if profile.cover_photo %}<img src="{{ profile.cover_photo.url }}" class="card-img-top" style="max-height:220px;object-fit:cover;">{% endif %}
+    <div class="card-body">
+        <h3>{{ staff_user.full_name }}
+            {% if profile.is_online %}<span class="badge bg-success">Online</span>{% else %}<span class="badge bg-secondary">Offline</span>{% endif %}
+        </h3>
+        {% if profile.profile_photo %}<img src="{{ profile.profile_photo.url }}" width="100" class="rounded mb-2">{% endif %}
+        <p>{{ profile.bio|default:"This profile is empty. Add a short bio to introduce yourself." }}</p>
+        <p><strong>Location:</strong> {{ profile.location|default:"Not specified" }} | <strong>Age:</strong> {{ profile.age|default:"N/A" }}</p>
+        <p><strong>Rating:</strong> {{ profile.average_rating }} ({{ profile.total_reviews }} reviews)</p>
+        {% if user == staff_user %}
+            <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">{% if profile.bio or profile.location or profile.age %}Edit Profile{% else %}Create Profile{% endif %}</a>
+        {% endif %}
+    </div>
+</div>
+
+<h4>Services</h4>
+<div class="row">
+{% for s in services %}
+    <div class="col-md-4 mb-2"><div class="card"><div class="card-body">
+        <h6>{{ s.title }}</h6>
+        <p>{{ s.token_price }} tokens</p>
+        <a href="{% url 'services:detail' s.id %}" class="btn btn-sm btn-primary">View</a>
+    </div></div></div>
+{% empty %}<p>No services.</p>{% endfor %}
+</div>
+
+<h4>Posts</h4>
+{% for p in posts %}
+<div class="card mb-2"><div class="card-body">
+    <p>{{ p.caption }}</p>
+    <a href="{% url 'posts:detail' p.id %}">View</a>
+</div></div>
+{% endfor %}
+
+<h4>Reviews</h4>
+{% for r in reviews %}
+<div class="border-bottom mb-2">
+    <strong>{{ r.user.full_name }}</strong> — {{ r.rating }}★ <br>{{ r.comment }}
+</div>
+{% empty %}<p>No reviews yet.</p>{% endfor %}
+
+{% if user.is_authenticated and user != staff_user %}
+<a href="{% url 'reports:report_user' staff_user.id %}" class="btn btn-outline-danger btn-sm">Report</a>
+<a href="{% url 'reports:block_user' staff_user.id %}" class="btn btn-outline-secondary btn-sm">Block</a>
+<a href="{% url 'chat:conversation' staff_user.id %}" class="btn btn-outline-primary btn-sm">Message</a>
+{% endif %}
+{% endblock %}

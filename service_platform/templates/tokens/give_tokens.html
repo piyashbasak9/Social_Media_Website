@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Give Tokens</h3>
+<form method="post">{% csrf_token %}
+    <div class="mb-2"><label>User Email</label><input name="email" class="form-control" required></div>
+    <div class="mb-2"><label>Amount</label><input name="amount" type="number" min="1" class="form-control" required></div>
+    <div class="mb-2"><label>Description</label><input name="description" class="form-control"></div>
+    <button class="btn btn-primary">Give</button>
+</form>
+{% endblock %}

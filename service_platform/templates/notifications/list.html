@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Notifications</h2>
+<a href="{% url 'notifications:read_all' %}" class="btn btn-sm btn-secondary mb-2">Mark all as read</a>
+<ul class="list-group">
+{% for n in notifications %}
+<li class="list-group-item {% if not n.is_read %}fw-bold{% endif %}">
+    <a href="{% url 'notifications:read' n.id %}">{{ n.message }}</a>
+    <small class="text-muted d-block">{{ n.created_at }}</small>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

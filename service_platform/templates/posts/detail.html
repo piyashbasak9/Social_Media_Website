@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>{{ post.staff.full_name }}'s post</h3>
+<p>{{ post.caption }}</p>
+{% for m in post.media.all %}
+    {% if m.media_type == 'image' %}
+        <img src="{{ m.file.url }}" style="max-width:400px;" class="d-block mb-2">
+    {% else %}
+        <video src="{{ m.file.url }}" controls style="max-width:400px;" class="d-block mb-2"></video>
+    {% endif %}
+{% endfor %}
+
+<h5>Comments ({{ post.comment_count }})</h5>
+{% for c in post.comments.all %}
+    <div class="border-bottom mb-2"><strong>{{ c.user.full_name }}:</strong> {{ c.text }}</div>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'posts:comment' post.id %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button class="btn btn-primary btn-sm">Comment</button>
+</form>
+{% endif %}
+{% endblock %}

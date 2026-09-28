@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <h2>{{ profile_user.full_name }}</h2>
+        {% if profile.profile_photo %}<img src="{{ profile.profile_photo.url }}" width="120" class="rounded-circle mb-3">{% endif %}
+        <p>{{ profile.bio|default:"No bio added yet." }}</p>
+        <p><strong>Age:</strong> {{ profile.age|default:"N/A" }} | <strong>Gender:</strong> {{ profile.get_gender_display|default:"Not specified" }}</p>
+        {% if is_owner %}
+            <p><strong>Token Balance:</strong> {{ balance }}</p>
+            <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">{% if profile.bio or profile.age or profile.gender %}Edit Profile{% else %}Create Profile{% endif %}</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

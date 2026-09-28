@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Book Appointment for "{{ service.title }}"</h3>
+<p>Price: {{ service.token_price }} tokens | Duration: {{ service.duration_minutes }} min</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}
+<button class="btn btn-primary">Book</button></form>
+{% endblock %}

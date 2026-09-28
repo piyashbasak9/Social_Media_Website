@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Inbox</h2>
+<ul class="list-group">
+{% for p in partners %}
+<li class="list-group-item"><a href="{% url 'chat:conversation' p.id %}">{{ p.full_name }}</a></li>
+{% empty %}<li class="list-group-item">No conversations yet.</li>{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Pending Services</h2>
+<table class="table">
+<tr><th>Title</th><th>Staff</th><th>Price</th><th>Actions</th></tr>
+{% for s in services %}
+<tr>
+    <td>{{ s.title }}</td><td>{{ s.staff.full_name }}</td><td>{{ s.token_price }}</td>
+    <td>
+        <a href="{% url 'services:approve' s.id %}" class="btn btn-sm btn-success">Approve</a>
+        <a href="{% url 'services:reject' s.id %}" class="btn btn-sm btn-danger">Reject</a>
+    </td>
+</tr>
+{% empty %}<tr><td colspan="4">No pending services.</td></tr>{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Adjust Token Balance</h3>
+<form method="post">{% csrf_token %}
+    <div class="mb-2"><label>User Email</label><input name="email" class="form-control" required></div>
+    <div class="mb-2"><label>Amount (+ or -)</label><input name="amount" type="number" class="form-control" required></div>
+    <button class="btn btn-primary">Apply</button>
+</form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Purchases</h2>
+<table class="table">
+<tr><th>Service</th><th>Staff</th><th>Tokens</th><th>Status</th><th>Expires</th></tr>
+{% for p in purchases %}
+<tr>
+    <td>{{ p.service.title }}</td><td>{{ p.staff.full_name }}</td>
+    <td>{{ p.tokens_spent }}</td><td>{{ p.get_status_display }}</td><td>{{ p.expires_at }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

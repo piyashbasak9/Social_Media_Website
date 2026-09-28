@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>All Reports</h2>
+<table class="table">
+<tr><th>Reporter</th><th>Reported</th><th>Reason</th><th>Status</th><th>Actions</th></tr>
+{% for r in reports %}
+<tr>
+    <td>{{ r.reporter.full_name }}</td><td>{{ r.reported_user.full_name }}</td>
+    <td>{{ r.get_reason_display }}</td><td>{{ r.get_status_display }}</td>
+    <td>
+        <a href="{% url 'reports:resolve' r.id %}" class="btn btn-sm btn-success">Resolve</a>
+        <a href="{% url 'reports:block_account' r.reported_user.id %}" class="btn btn-sm btn-danger">Block</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Chat with {{ partner.full_name }}</h3>
+<div class="border p-3 mb-2" style="max-height:400px;overflow-y:auto;">
+{% for m in messages %}
+    <div class="mb-2 {% if m.sender == user %}text-end{% endif %}">
+        <span class="badge bg-{% if m.sender == user %}primary{% else %}secondary{% endif %}">
+            {{ m.sender.full_name }}: {{ m.body }}
+        </span>
+    </div>
+{% endfor %}
+</div>
+<form method="post">{% csrf_token %}
+    <div class="input-group">
+        <input name="body" class="form-control" placeholder="Type a message...">
+        <button class="btn btn-primary">Send</button>
+    </div>
+</form>
+{% endblock %}
