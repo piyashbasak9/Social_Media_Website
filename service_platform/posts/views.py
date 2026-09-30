@@ -14,7 +14,10 @@ from .forms import PostForm, PostMediaForm, CommentForm
 def home_view(request):
     """Home feed with posts + approved services."""
     posts = Post.objects.select_related('staff').prefetch_related('media', 'likes', 'comments')
-    services = Service.objects.filter(status=Service.Status.APPROVED).select_related('staff')[:8]
+    services = Service.objects.filter(
+        status=Service.Status.APPROVED,
+        service_type=Service.ServiceType.GENERAL,
+    ).select_related('staff')[:8]
     return render(request, 'posts/home.html', {'posts': posts, 'featured_services': services})
 
 

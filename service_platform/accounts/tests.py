@@ -65,20 +65,19 @@ class LoginAccessControlTests(TestCase):
         self.assertTrue(StaffProfile.objects.filter(user=user).exists())
         self.assertFalse(NormalUserProfile.objects.filter(user=user).exists())
 
-    def test_only_staff_can_access_staff_service_actions(self):
+    def test_staff_and_admin_can_access_service_management(self):
         @staff_required
         def dummy_staff_view(request):
             return 'ok'
 
         staff_request = SimpleNamespace(user=SimpleNamespace(is_authenticated=True, role=User.Role.STAFF))
-        normal_request = SimpleNamespace(user=SimpleNamespace(is_authenticated=True, role=User.Role.NORMAL))
         admin_request = SimpleNamespace(user=SimpleNamespace(is_authenticated=True, role=User.Role.SUPER_ADMIN))
+        normal_request = SimpleNamespace(user=SimpleNamespace(is_authenticated=True, role=User.Role.NORMAL))
 
         self.assertEqual(dummy_staff_view(staff_request), 'ok')
+        self.assertEqual(dummy_staff_view(admin_request), 'ok')
         with self.assertRaises(PermissionDenied):
             dummy_staff_view(normal_request)
-        with self.assertRaises(PermissionDenied):
-            dummy_staff_view(admin_request)
 
     def test_only_normal_users_can_access_service_purchase_actions(self):
         @normal_user_required

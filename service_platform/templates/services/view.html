@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-4">
+    <div>
+        <h2 class="mb-1">{{ service.title }}</h2>
+        <p class="text-muted mb-0">Photo and Video gallery by {{ service.staff.full_name }}</p>
+    </div>
+    <a href="{% url 'services:list' %}" class="btn btn-outline-secondary">Back to services</a>
+</div>
+
+<div class="row g-3">
+    {% for media in service.media.all %}
+    <div class="col-md-6 col-xl-4">
+        <div class="service-card h-100">
+            {% if media.media_type == 'image' %}
+                <img src="{% url 'services:media_file' media.id %}" class="img-fluid w-100 rounded" alt="Photo from {{ service.title }}">
+            {% else %}
+                <video src="{% url 'services:media_file' media.id %}" controls preload="metadata" class="w-100 rounded"></video>
+            {% endif %}
+            <div class="small text-muted mt-2">{{ media.get_media_type_display }}</div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12"><div class="empty-state">No photos or videos have been added yet.</div></div>
+    {% endfor %}
+</div>
+{% endblock %}

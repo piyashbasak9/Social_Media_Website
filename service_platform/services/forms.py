@@ -5,12 +5,11 @@ from .models import Service, ServiceMedia
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ['title', 'description', 'token_price', 'duration_minutes', 'service_type']
+        fields = ['title', 'description', 'token_price', 'service_type']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'token_price': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
-            'duration_minutes': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'service_type': forms.Select(attrs={'class': 'form-select'}),
         }
 
@@ -19,19 +18,6 @@ class ServiceForm(forms.ModelForm):
         if price <= 0:
             raise forms.ValidationError('Token price must be greater than 0.')
         return price
-
-    def clean(self):
-        cleaned = super().clean()
-        service_type = cleaned.get('service_type')
-        duration = cleaned.get('duration_minutes')
-
-        if service_type == Service.ServiceType.GENERAL and duration and duration < 15:
-            self.add_error('duration_minutes', 'Photo/video showcase services must be at least 15 minutes.')
-        elif service_type in [Service.ServiceType.AUDIO_CALL, Service.ServiceType.VIDEO_CALL] and duration and duration < 10:
-            self.add_error('duration_minutes', 'Call services must be at least 10 minutes.')
-
-        return cleaned
-
 
 class ServiceMediaForm(forms.ModelForm):
     """Upload one media file for a service (called multiple times)."""

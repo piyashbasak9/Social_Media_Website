@@ -3,28 +3,21 @@
 <h2>{{ service.title }}</h2>
 <p>{{ service.description }}</p>
 <p><strong>Price:</strong> {{ service.token_price }} tokens</p>
-<p><strong>Duration:</strong> {{ service.duration_minutes }} minutes</p>
-<p><strong>Type:</strong> {{ service.get_service_type_display }}</p>
+<p><strong>Type:</strong> Photo and Video</p>
 <p><strong>Provider:</strong> <a href="{% url 'profiles:staff_profile' service.staff.id %}">{{ service.staff.full_name }}</a></p>
 
-{% for m in service.media.all %}
-    {% if m.media_type == 'image' %}
-        <img src="{{ m.file.url }}" style="max-width:250px;" class="me-2">
-    {% else %}
-        <video src="{{ m.file.url }}" controls style="max-width:250px;" class="me-2"></video>
-    {% endif %}
-{% endfor %}
-
 <div class="mt-3">
-{% if user.is_authenticated and user.is_normal_user %}
-    {% if service.service_type == 'general' %}
-    <form method="post" action="{% url 'appointments:purchase' service.id %}">
+{% if user.is_super_admin or service.staff_id == user.id %}
+    <a href="{% url 'services:view' service.id %}" class="btn btn-primary">View Gallery</a>
+{% elif unlocked %}
+    <a href="{% url 'services:view' service.id %}" class="btn btn-primary">View Gallery</a>
+{% elif user.is_authenticated and user.is_normal_user %}
+    <form method="post" action="{% url 'services:unlock' service.id %}">
         {% csrf_token %}
-        <button class="btn btn-success">Purchase ({{ service.token_price }} tokens)</button>
+        <button class="btn btn-primary">Unlock for {{ service.token_price }} tokens</button>
     </form>
-    {% else %}
-    <a href="{% url 'appointments:book' service.id %}" class="btn btn-primary">Book Appointment</a>
-    {% endif %}
+{% elif not user.is_authenticated %}
+    <a href="{% url 'accounts:login' %}" class="btn btn-primary">Sign in to unlock</a>
 {% endif %}
 
 {% if user.is_super_admin %}

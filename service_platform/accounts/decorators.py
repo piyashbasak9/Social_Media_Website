@@ -21,8 +21,8 @@ def super_admin_required(view_func):
 
 
 def staff_required(view_func):
-    # Staff users are the only ones allowed to create and manage services.
-    return role_required('staff')(view_func)
+    # Staff users manage services; super-admin can also access management pages.
+    return role_required('staff', 'super_admin')(view_func)
 
 
 def normal_user_required(view_func):

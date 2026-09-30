@@ -19,4 +19,4 @@ class Message(models.Model):
         ordering = ['created_at']
 
     def __str__(self):
-        return f"{self.sender.email} -> {self.receiver.email}"
+        return ''

@@ -7,7 +7,7 @@ class Service(models.Model):
     """A service offered by a staff user."""
 
     class ServiceType(models.TextChoices):
-        GENERAL = 'general', 'Photo/Video Showcase Service'
+        GENERAL = 'general', 'Photo and Video'
         AUDIO_CALL = 'audio_call', 'Audio Call Service'
         VIDEO_CALL = 'video_call', 'Video Call Service'
 
@@ -25,7 +25,8 @@ class Service(models.Model):
     token_price = models.PositiveIntegerField()
     duration_minutes = models.PositiveIntegerField(default=30)
     service_type = models.CharField(
-        max_length=20, choices=ServiceType.choices, default=ServiceType.GENERAL
+        max_length=20, choices=[(ServiceType.GENERAL, ServiceType.GENERAL.label)],
+        default=ServiceType.GENERAL
     )
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -56,3 +57,21 @@ class ServiceMedia(models.Model):
 
     def __str__(self):
         return f"{self.media_type} for {self.service.title}"
+
+
+class ServiceUnlock(models.Model):
+    """Records a user's token-paid access to a service gallery."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='service_unlocks'
+    )
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='unlocks')
+    unlocked_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'service'], name='unique_user_service_unlock')
+        ]
+
+    def __str__(self):
+        return f"{self.user} unlocked {self.service.title}"
